@@ -31,12 +31,13 @@ void GameScene::Initialize() {
 
 	viewProjection_.Initialize();
 
+
 	//音声
 	//
 	soundDataHandle_ = audio_->LoadWave("fanfare.wav");
 
 	voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
-	audio_->PlayWave(soundDataHandle_);
+	//audio_->PlayWave(soundDataHandle_);
 
 
 	//ライン描画
