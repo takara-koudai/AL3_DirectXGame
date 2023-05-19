@@ -1,6 +1,7 @@
 #include "GameScene.h"
 #include "TextureManager.h"
 #include <cassert>
+#include "ImGuiManager.h"
 
 GameScene::GameScene() {}
 
@@ -8,7 +9,10 @@ GameScene::~GameScene()
 { 
 	delete model_;
 	delete player_;
+	delete debugCamera_;
+
 }
+
 
 void GameScene::Initialize() {
 
@@ -18,7 +22,7 @@ void GameScene::Initialize() {
 
 	
 	textureHandle_ = TextureManager::Load("mario.jpg");
-
+	//textureHandle_ = TextureManager::Load("debugfont.png");
 
 	worldTransform_.Initialize();
 
@@ -30,6 +34,7 @@ void GameScene::Initialize() {
 	//プレイヤー
 	//
 
+
 	model_ = Model::Create();
 
 
@@ -38,14 +43,74 @@ void GameScene::Initialize() {
 
 	//自キャラの初期化
 	player_->Initialize(model_,textureHandle_);
+	
 
+	//デバックカメラの生成
+	debugCamera_ = new DebugCamera(1280, 720);
 
 }
 
 void GameScene::Update() 
 {
+	//viewProjection_.UpdateMatrix();
+	//viewProjection_.TransferMatrix();
 	//自キャラの更新
 	player_->Update();
+
+
+	ImGui::Begin("Debug1");
+
+	//float3入力ボックス
+	
+	//ImGui::InputFloat3("InputFloat3", inputFloat3);
+
+
+	//float3スライダー
+	ImGui::SliderFloat3("SliderFloat3", inputFloat3, 0.0f, 1.0f);
+
+	ImGui::ShowDemoWindow();
+
+	ImGui::End();
+
+
+	debugCamera_->Update();
+
+
+	#ifdef DEBUG
+
+	if (input->TriggerKey(DIK_K) == isDebugCameraActive_ == false) 
+	{
+		isDebugCameraActive_ = true;
+
+		//debugCamera->Update();
+	} else if (input_->TriggerKey(DIK_K) == isDebugCameraActive_ == true) 
+	{
+		isDebugCameraActive_ = false;
+	}
+
+#endif // DEBUG
+
+
+	// Cameraの処理
+	if (isDebugCameraActive_) 
+	{
+
+		debugCamera_->Update();
+
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+
+		//ビュープロジェクション行列の転送
+		viewProjection_.TransferMatrix();
+
+	} 
+	else 
+	{
+		//ビュープロジェクション行列の更新と転送
+		viewProjection_.UpdateMatrix();
+	}
+
+	
 
 }
 

@@ -1,33 +1,44 @@
-#pragma once
+ï»¿#pragma once
 #include "Model.h"
 #include "WorldTransform.h"
+#include "Input.h"
+
 
 class Player {
 public:
 
 	void Initialize(Model* model, uint32_t textureHandle);
 
-	//
-	// XVˆ—
-	//
+	
+	// æ›´æ–°å‡¦ç†
+
 
 	void Update();
 
-	//
-	// •`‰æ
-	//
+	
+	// æç”»
+	
+
 
 	void Draw(ViewProjection &viewProjection);
 
+	
+
 private:
-	// ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+	// ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
 	WorldTransform worldTransform_;
 
 	ViewProjection viewProjection_;
 
-	//ƒ‚ƒfƒ‹
+	//ãƒ¢ãƒ‡ãƒ«
 	Model* model_ = nullptr;
 
-	//ƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹
+	//ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«
 	uint32_t textureHandle_ = 0u;
+
+	
+	//ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰å…¥åŠ›
+	Input* input_ = nullptr;
+	
+
 };
