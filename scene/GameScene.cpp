@@ -2,6 +2,9 @@
 #include "TextureManager.h"
 #include <cassert>
 #include "ImGuiManager.h"
+#include "AxisIndicator.h"
+#include "Player.h"
+#include "PlayerBullet.h"
 
 GameScene::GameScene() {}
 
@@ -48,12 +51,16 @@ void GameScene::Initialize() {
 	//デバックカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
 
+	// 軸方向表示の表示を有効にする
+	AxisIndicator::GetInstance()->SetVisible(true);
+	// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
+	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
+
 }
 
 void GameScene::Update() 
 {
-	//viewProjection_.UpdateMatrix();
-	//viewProjection_.TransferMatrix();
+	
 	//自キャラの更新
 	player_->Update();
 
@@ -73,12 +80,12 @@ void GameScene::Update()
 	ImGui::End();
 
 
-	debugCamera_->Update();
+	//debugCamera_->Update();
 
 
-	#ifdef DEBUG
+	#ifdef _DEBUG
 
-	if (input->TriggerKey(DIK_K) == isDebugCameraActive_ == false) 
+	if (input_->TriggerKey(DIK_K) == isDebugCameraActive_ == false)
 	{
 		isDebugCameraActive_ = true;
 

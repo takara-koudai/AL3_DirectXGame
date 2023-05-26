@@ -2,9 +2,11 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include "Input.h"
+#include "PlayerBullet.h"
 
 
-class Player {
+class Player 
+{
 public:
 
 	void Initialize(Model* model, uint32_t textureHandle);
@@ -17,14 +19,18 @@ public:
 
 	
 	// 描画
-	
 
 
 	void Draw(ViewProjection &viewProjection);
 
 	
+	//攻撃
+	void Attack(Vector3& position);
+
+	
 
 private:
+
 	// ワールド変換データ
 	WorldTransform worldTransform_;
 
@@ -39,6 +45,10 @@ private:
 	
 	//キーボード入力
 	Input* input_ = nullptr;
+
+
+	// 弾
+	PlayerBullet* bullet_ = nullptr;
 	
 
 };
