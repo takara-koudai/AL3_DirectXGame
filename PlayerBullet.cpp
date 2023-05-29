@@ -2,7 +2,7 @@
 #include <cassert>
 #include "MatrixTrans.h"
 
-void PlayerBullet::Initialize(Model* model, const Vector3& position) 
+void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vector3& velocity) 
 {
 
 	//NULLポインタチェック
@@ -20,13 +20,22 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position)
 
 	worldTransform_.translation_ = position;
 
+	velocity_ = velocity;
+
 }
 
 
 void PlayerBullet::Update() 
 {
-	 //worldTransform_.translation_ = Add(worldTransform_.translation_, move);
-	 worldTransform_.UpdateMatrix(); 
+
+	worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
+	
+	worldTransform_.UpdateMatrix(); 
+
+	if (--deathTimer_ <= 0)
+	{
+		isDead_ = true;
+	}
 
 }
 
