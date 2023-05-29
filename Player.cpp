@@ -4,6 +4,19 @@
 #include "ImGuiManager.h"
 
 
+//bullet_の解放
+Player::~Player()
+{
+
+	for (PlayerBullet* bullet : bullets_) 
+	{
+		delete bullet_;
+		
+	}
+
+}
+
+
 //
 //初期化
 void Player::Initialize(Model* model, uint32_t textureHandle) { 
@@ -35,6 +48,33 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 	
 	// ワールド変換の初期化
 	worldTransform_.Initialize();
+}
+
+
+void Player::Attack(Vector3& position) 
+{
+
+	if (input_->TriggerKey(DIK_SPACE)) 
+	{
+
+		// 弾があれば解放する
+		/*if (bullet_)
+		{
+		    delete bullet_;
+		    bullet_ = nullptr;
+		}*/
+
+		
+
+		// 弾を生成し、初期化
+		PlayerBullet* newBullet = new PlayerBullet();
+		newBullet->Initialize(model_, position);
+
+		// 弾を登録する
+		//bullet_ = newBullet;
+
+		bullets_.push_back(newBullet);
+	}
 }
 
 
@@ -100,12 +140,16 @@ void Player::Update()
 
 
 	//弾更新
-	if (bullet_)
+	/*if (bullet_) 
 	{
-		bullet_->Update();
-	}
 
+		bullet_->Update();
+	}*/
 	
+	for (PlayerBullet* bullet : bullets_) 
+	{
+		bullet->Update();
+	}
 
 	//足し算
 	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
@@ -142,23 +186,6 @@ void Player::Update()
 }
 
 
-void Player::Attack(Vector3& position)
-{
-	
-	if (input_->TriggerKey(DIK_SPACE))
-	{
-
-		// 弾を生成し、初期化
-		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(model_, position);
-
-		// 弾を登録する
-		bullet_ = newBullet;
-	}
-	
-}
-
-
 //
 //描画
 void Player::Draw(ViewProjection &viewProjection)
@@ -166,9 +193,15 @@ void Player::Draw(ViewProjection &viewProjection)
 
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 
-	if (bullet_)
+	/*if (bullet_)
 	{
 		bullet_->Draw(viewProjection);
+		
+	}*/
+
+	for (PlayerBullet* bullet : bullets_) 
+	{
+		bullet->Draw(viewProjection);
 	}
 	
 }
