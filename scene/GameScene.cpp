@@ -5,6 +5,7 @@
 #include "AxisIndicator.h"
 #include "Player.h"
 #include "PlayerBullet.h"
+#include "Enemy.h"
 
 GameScene::GameScene() {}
 
@@ -13,7 +14,7 @@ GameScene::~GameScene()
 	delete model_;
 	delete player_;
 	delete debugCamera_;
-
+	delete enemy_;
 }
 
 
@@ -26,6 +27,9 @@ void GameScene::Initialize() {
 	
 	textureHandle_ = TextureManager::Load("mario.jpg");
 	//textureHandle_ = TextureManager::Load("debugfont.png");
+
+	EnemytextureHandle_ = TextureManager::Load("jugemu.jpg");
+
 
 	worldTransform_.Initialize();
 
@@ -43,10 +47,18 @@ void GameScene::Initialize() {
 
 	//自キャラの生成
 	player_ = new Player();
+	
 
 	//自キャラの初期化
 	player_->Initialize(model_,textureHandle_);
-	
+
+
+
+	//敵キャラの初期化
+	enemy_ = new Enemy();
+
+	enemy_->Initialize(model_, EnemytextureHandle_);
+
 
 	//デバックカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
@@ -63,7 +75,7 @@ void GameScene::Update()
 	
 	//自キャラの更新
 	player_->Update();
-
+	enemy_->Update();
 
 	ImGui::Begin("Debug1");
 
@@ -153,6 +165,7 @@ void GameScene::Draw() {
 	
 	player_->Draw(viewProjection_);
 
+	enemy_->Draw(viewProjection_);
 
 
 	// 3Dオブジェクト描画後処理
