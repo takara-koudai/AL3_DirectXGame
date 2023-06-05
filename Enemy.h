@@ -2,6 +2,12 @@
 #include "Model.h"
 #include "WorldTransform.h"
 
+enum class Phase
+{
+	Approach,
+	Leave,
+};
+
 class Enemy
 {
 public:
@@ -34,6 +40,9 @@ private:
 
 	uint32_t EnemytextureHandle_ = 0u;
 
+
+	//フェーズ
+	Phase phase_ = phase_;
 
 };
 

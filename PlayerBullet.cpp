@@ -30,7 +30,7 @@ void PlayerBullet::Update()
 
 	worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
 	
-	worldTransform_.UpdateMatrix(); 
+	worldTransform_.UpdateMatrix();
 
 	if (--deathTimer_ <= 0)
 	{
