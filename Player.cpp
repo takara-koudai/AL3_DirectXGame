@@ -161,7 +161,6 @@ void Player::Update()
 	//弾更新
 	/*if (bullet_) 
 	{
-
 		bullet_->Update();
 	}*/
 	
@@ -201,16 +200,21 @@ void Player::Update()
 
 	ImGui::End();*/
 
-
 }
 
 
 //
 //描画
 void Player::Draw(ViewProjection &viewProjection)
-{ 
+{
 
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+
+
+	for (PlayerBullet* bullet : bullets_) 
+	{
+		bullet->Draw(viewProjection);
+	}
 
 	/*if (bullet_)
 	{
@@ -218,9 +222,6 @@ void Player::Draw(ViewProjection &viewProjection)
 		
 	}*/
 
-	for (PlayerBullet* bullet : bullets_) 
-	{
-		bullet->Draw(viewProjection);
-	}
+	
 	
 }

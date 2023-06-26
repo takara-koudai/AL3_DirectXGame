@@ -57,6 +57,6 @@ private:
 	
 
 	//弾
-	std::list<PlayerBullet*> bullets_;
+	std:: list<PlayerBullet*> bullets_;
 
 };

@@ -14,8 +14,6 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vecto
 	ModeltextureHandle_ = TextureManager::Load("black.png");
 
 	//ワールドトランスフォーム初期化
-	//worldTransform_.translation_ = {};
-
 	worldTransform_.Initialize();
 
 	worldTransform_.translation_ = position;
