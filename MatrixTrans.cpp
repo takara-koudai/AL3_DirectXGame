@@ -1,6 +1,7 @@
 #include "MatrixTrans.h"
 #include "Player.h"
 
+
 Vector3 Add(const Vector3 v1, const Vector3 v2) 
 {
 	Vector3 result = {};
@@ -9,6 +10,28 @@ Vector3 Add(const Vector3 v1, const Vector3 v2)
 	result.z = v1.z + v2.z;
 
 	return result;
+}
+
+// ˆø‚«Z
+Vector3 Subtract(const Vector3& v1, const Vector3& v2) 
+{
+	Vector3 result;
+	result.x = v1.x - v2.x;
+	result.y = v1.y - v2.y;
+	result.z = v1.z - v2.z;
+	return result;
+}
+
+Vector3 Multiply2(const Vector3& v1, const Vector3& v2)
+{
+
+	Vector3 result;
+	result.x = v1.x * v2.x;
+	result.y = v1.y * v2.y;
+	result.z = v1.z * v2.z;
+
+	return result;
+
 }
 
 Matrix4x4 Multiply(const Matrix4x4 m1, const Matrix4x4 m2) 
@@ -234,3 +257,33 @@ Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m)
 	return result;
 }
 
+// “àÏ
+float Dot(const Vector3& v1, const Vector3& v2) 
+{
+	float result;
+
+	result = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+
+	return result;
+}
+
+// ’·‚³A•½•ûª
+float Length(const Vector3& v) 
+{
+	float reslut;
+	reslut = sqrtf(Dot(v, v));
+	return reslut;
+}
+
+// ³‹K‰»
+Vector3 Normalize(const Vector3& v) 
+{
+
+	Vector3 result;
+
+	result.x = v.x / Length(v);
+	result.y = v.y / Length(v);
+	result.z = v.z / Length(v);
+
+	return result;
+}

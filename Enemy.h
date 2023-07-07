@@ -4,11 +4,16 @@
 #include "EnemyBullet.h"
 #include <list>
 
+
 enum class Phase
 {
 	Approach,
 	Leave,
 };
+
+//自機クラスの前方宣言
+class Player;
+
 
 class Enemy
 {
@@ -19,10 +24,8 @@ public:
 	void Initialize(Model* model, uint32_t textureHandle);
 
 
-
 	//更新処理
 	void Update();
-
 
 
 	//描画
@@ -33,14 +36,24 @@ public:
 	void Fire(Vector3& position_);
 
 
+	//デストラクタ
 	~Enemy();
 
 
+	//弾発射間隔
 	static const int kFireInterval = 60;
 	
 
 	//接近フェーズの初期化
 	void Phase_();
+
+
+	//setterの利用
+	void SetPlayer(Player* player) { player_ = player; }
+
+
+	// ワールド座標を取得
+	Vector3 GetWorldPosition();
 
 
 private:
@@ -49,6 +62,7 @@ private:
 	WorldTransform worldTransform_;
 
 	ViewProjection viewProjection_;
+
 
 	// モデル
 	Model* model_ = nullptr;
@@ -68,6 +82,12 @@ private:
 
 	//発射タイマー
 	int32_t fireTimer = 0;
+
+
+	//自キャラ
+	Player* player_ = nullptr;
+
+	
 
 };
 

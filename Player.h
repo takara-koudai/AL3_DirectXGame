@@ -6,22 +6,21 @@
 #include <list>
 
 
+
 class Player 
 {
 public:
 
+
+	//初期化
 	void Initialize(Model* model, uint32_t textureHandle);
 
 	
 	// 更新処理
-
-
 	void Update();
 
 	
 	// 描画
-
-
 	void Draw(ViewProjection &viewProjection);
 
 	
@@ -33,6 +32,10 @@ public:
 	~Player();
 
 
+	// ワールド座標を取得
+	Vector3 GetWorldPosition();
+	
+
 
 private:
 
@@ -41,8 +44,10 @@ private:
 
 	ViewProjection viewProjection_;
 
+
 	//モデル
 	Model* model_ = nullptr;
+
 
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
@@ -58,5 +63,9 @@ private:
 
 	//弾
 	std:: list<PlayerBullet*> bullets_;
+
+
+	
+
 
 };

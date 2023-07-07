@@ -16,6 +16,22 @@ Player::~Player()
 }
 
 
+Vector3 Player::GetWorldPosition()
+{
+
+	//ワールド座標を入れる変数
+	Vector3 worldPos;
+
+	//ワールド行列の平行移動成分を取得(ワールド座標)
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
+
+}
+
+
 //
 //初期化
 void Player::Initialize(Model* model, uint32_t textureHandle) { 
@@ -164,10 +180,12 @@ void Player::Update()
 		bullet_->Update();
 	}*/
 	
+
 	for (PlayerBullet* bullet : bullets_) 
 	{
 		bullet->Update();
 	}
+
 
 	//足し算
 	worldTransform_.translation_ = Add(worldTransform_.translation_, move);

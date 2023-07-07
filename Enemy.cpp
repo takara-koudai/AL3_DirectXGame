@@ -2,6 +2,7 @@
 //#include "EnemyBullet.h"
 #include "MatrixTrans.h"
 #include <cassert>
+#include "Player.h"
 
 Enemy::~Enemy()
 {
@@ -10,6 +11,22 @@ Enemy::~Enemy()
 		delete Enemybullet_;
 	}
 }
+
+
+Vector3 Enemy::GetWorldPosition() 
+{
+
+	// ワールド座標を入れる変数
+	Vector3 worldPos;
+
+	// ワールド行列の平行移動成分を取得(ワールド座標)
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
+}
+
 
 void Enemy::Initialize(Model* model, uint32_t textureHandle)
 {
@@ -22,7 +39,7 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle)
 
 	worldTransform_.Initialize();
 
-	worldTransform_.translation_.z = 60.0f;
+	worldTransform_.translation_.z = 80.0f;
 	worldTransform_.translation_.x = 30.0f;
 
 	phase_ = Phase::Approach;
@@ -33,12 +50,45 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle)
 void Enemy::Fire(Vector3& position_) 
 {
 
+	assert(player_);
+
 	// 弾の速度
-	const float kBulletSpeed = -2.0f;
-	Vector3 velocity(0, 0, kBulletSpeed);
+	const float kBulletSpeed = 1.0f;
+	Vector3 velocity(1, 1, kBulletSpeed);
+
+	
+	// ワールド座標を取得する
+	Vector3 enemyPos = GetWorldPosition();
+
+	Vector3 playerPos = player_->GetWorldPosition();
+
+	// 差分ベクトルを求める
+
+	Vector3 resultVector = 
+	{
+	    playerPos.x - enemyPos.x, 
+		playerPos.y - enemyPos.y, 
+		playerPos.z - enemyPos.z
+	};
+
+
+	// ベクトルの正規化
+	Vector3 resultNormalize = Normalize(resultVector);
+
+	// ベクトルの長さを、速さに合わせる
+	
+	velocity = 
+	{
+	    resultNormalize.x * velocity.x,
+		resultNormalize.y * velocity.y,
+	    resultNormalize.z * velocity.z,
+	};
+	
+
 
 	// 速度ベクトルを自機の向きに合わせて回転させる
-	velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+	//velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+
 
 	// 弾を生成し、初期化
 	EnemyBullet* newEnemyBullet = new EnemyBullet();
@@ -46,7 +96,6 @@ void Enemy::Fire(Vector3& position_)
 
 	// 弾を登録する
     //Enemybullet_ = newEnemyBullet;
-	
 
 	Enemybullets_.push_back(newEnemyBullet);
 }
@@ -72,9 +121,6 @@ void Enemy::Update()
 		// 移動(ベクトルの加算)
 		move.z -= kCharacterSpeed;
 		
-		//
-		//EnemyのUpdateを呼ぶ
-		
 
 		// 敵の攻撃処理
 		// 発射タイマーカウントダウン
@@ -87,13 +133,6 @@ void Enemy::Update()
 
 			// 弾を発射
 			Fire(worldTransform_.translation_);
-
-			//Enemybullet_->Update();
-			for (EnemyBullet* bullet : Enemybullets_) 
-			{
-				bullet->Update();
-			}
-			
 
 			// 発射タイマーを初期化
 			fireTimer = kFireInterval;
