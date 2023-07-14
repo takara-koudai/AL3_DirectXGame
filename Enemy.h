@@ -41,7 +41,7 @@ public:
 
 
 	//弾発射間隔
-	static const int kFireInterval = 60;
+	static const int kFireInterval = 50;
 	
 
 	//接近フェーズの初期化
@@ -55,6 +55,12 @@ public:
 	// ワールド座標を取得
 	Vector3 GetWorldPosition();
 
+	// 衝突を検出したら呼び出されるコールバック関数
+	void OnCollision();
+
+	// 弾リスト
+	const std::list<EnemyBullet*>& GetBullet() const { return Enemybullets_; }
+	
 
 private:
 

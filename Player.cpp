@@ -18,7 +18,6 @@ Player::~Player()
 
 Vector3 Player::GetWorldPosition()
 {
-
 	//ワールド座標を入れる変数
 	Vector3 worldPos;
 
@@ -100,6 +99,10 @@ void Player::Attack(Vector3& position)
 	}
 }
 
+void Player::OnCollision()
+{
+	
+}
 
 //
 //更新処理

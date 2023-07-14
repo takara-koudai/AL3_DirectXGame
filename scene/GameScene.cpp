@@ -4,8 +4,10 @@
 #include "ImGuiManager.h"
 #include "AxisIndicator.h"
 #include "Player.h"
-#include "PlayerBullet.h"
 #include "Enemy.h"
+#include "PlayerBullet.h"
+#include "EnemyBullet.h"
+#include "MatrixTrans.h"
 
 GameScene::GameScene() {}
 
@@ -64,6 +66,7 @@ void GameScene::Initialize() {
 	enemy_->SetPlayer(player_);
 
 
+	
 
 	//デバックカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
@@ -74,6 +77,132 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
 
 }
+
+void GameScene::CheckAllCollisions()
+{
+	Vector3 posA, posB;
+
+	//自弾リストの取得
+	const std::list<PlayerBullet*>& playerBullets = player_->GetBullet();
+	//敵弾リストの取得
+	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullet();
+
+	//自キャラと敵弾の当たり判定
+	#pragma region
+
+	//自キャラの座標
+	posA = player_->GetWorldPosition();
+
+
+	//自キャラと敵弾の当たり判定
+	for (EnemyBullet* bullet : enemyBullets)
+	{
+		//敵弾の座標
+		posB = bullet->GetWorldPosition();
+
+		float dx;
+		float dy;
+		float dz;
+		float distance;
+		float radius = 0.5f;
+
+
+		// 座標AとBの距離を求める
+		dx = (posB.x - posA.x) * (posB.x - posA.x);
+		dy = (posB.y - posA.y) * (posB.y - posA.y);
+		dz = (posB.z - posA.z) * (posB.z - posA.z);
+		
+		distance = dx + dy + dz;
+
+		//球と球の交差判定
+		if (distance <= (radius + radius) * (radius + radius))
+		{
+			// 自キャラの衝突時コールバックを呼び出す
+			player_->OnCollision();
+
+			// 敵弾の衝突時コールバックを呼び出す
+			bullet->OnCollision();
+		}
+	}
+
+	#pragma endregion
+
+	//自弾と敵キャラの当たり判定
+	#pragma region
+
+	Vector3 PosA, PosB;
+
+	PosA = enemy_->GetWorldPosition();
+
+	for (PlayerBullet* playerbullet : playerBullets)
+	{
+		//自弾の座標
+		PosB = playerbullet->GetWorldPosition();
+
+		float Dx;
+		float Dy;
+		float Dz;
+		float distance2;
+		float radius2 = 0.5;
+
+		//距離を求める
+		Dx = (PosB.x - PosA.x) * (PosB.x - PosA.x);
+		Dy = (PosB.y - PosA.y) * (PosB.y - PosA.y);
+		Dz = (PosB.z - PosA.z) * (PosB.z - PosA.z);
+
+		distance2 = Dx + Dy + Dz;
+
+		if (distance2 <= (radius2 + radius2) * (radius2 + radius2))
+		{
+			enemy_->OnCollision();
+
+			playerbullet->OnCollision();
+		}
+	}
+
+	#pragma endregion
+
+	//自弾と敵弾の当たり判定
+	#pragma region
+
+	Vector3 BulletposA, BulletposB;
+
+	for (PlayerBullet* BulletPlayer : playerBullets)
+	{
+		BulletposA = BulletPlayer->GetWorldPosition();
+
+		for (EnemyBullet* BulletEnemy : enemyBullets)
+		{
+			BulletposB = BulletEnemy->GetWorldPosition();
+
+			float dX;
+			float dY;
+			float dZ;
+			float distance3;
+			float radius3 = 0.5;
+
+			dX = (BulletposB.x - BulletposA.x) * (BulletposB.x - BulletposA.x);
+			dY = (BulletposB.y - BulletposA.y) * (BulletposB.y - BulletposA.y);
+			dZ = (BulletposB.z - BulletposA.z) * (BulletposB.z - BulletposA.z);
+
+			distance3 = dX + dY + dZ;
+
+			if (distance3 <= (radius3 + radius3) * (radius3 + radius3))
+			{
+				BulletEnemy->OnCollision();
+
+				BulletPlayer->OnCollision();
+			}
+
+		}
+
+	}
+
+
+	#pragma endregion
+
+}
+
 
 void GameScene::Update() 
 {
@@ -96,6 +225,8 @@ void GameScene::Update()
 
 	ImGui::End();
 
+	// 当たり判定
+	CheckAllCollisions();
 
 	//debugCamera_->Update();
 

@@ -62,6 +62,7 @@ void Enemy::Fire(Vector3& position_)
 
 	Vector3 playerPos = player_->GetWorldPosition();
 
+
 	// 差分ベクトルを求める
 
 	Vector3 resultVector = 
@@ -76,14 +77,12 @@ void Enemy::Fire(Vector3& position_)
 	Vector3 resultNormalize = Normalize(resultVector);
 
 	// ベクトルの長さを、速さに合わせる
-	
 	velocity = 
 	{
 	    resultNormalize.x * velocity.x,
 		resultNormalize.y * velocity.y,
 	    resultNormalize.z * velocity.z,
 	};
-	
 
 
 	// 速度ベクトルを自機の向きに合わせて回転させる
@@ -107,12 +106,17 @@ void Enemy::Phase_()
 	fireTimer = kFireInterval;
 }
 
+void Enemy::OnCollision()
+{
+
+}
+
 void Enemy::Update()
 {
 
 	Vector3 move = {0.0, 0.0, 0.0f};
 
-	const float kCharacterSpeed = 0.2f;
+	const float kCharacterSpeed = 0.1f;
 
 	switch (phase_) {
 	case Phase::Approach: // 接近フェーズ
