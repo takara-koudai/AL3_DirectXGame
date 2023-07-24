@@ -50,6 +50,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 
 	//スケーリング
 	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
+	
 
 
 	//回転
@@ -57,7 +58,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 	worldTransform_.rotation_ = {0.0f, 0.0f, 0.0f};
 
 	//平行移動行列
-	worldTransform_.translation_ = {0.0f, 0.0f, 0.0f};
+	worldTransform_.translation_ = {0.0f, 0.0f, -5.0f};
 
 	
 	// ワールド変換の初期化

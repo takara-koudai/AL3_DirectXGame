@@ -1,17 +1,17 @@
-#include "EnemyBullet.h"
+ï»¿#include "EnemyBullet.h"
 #include <cassert>
 #include "MatrixTrans.h"
 
 
 void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector3& velocity)
 {
-	//NULLƒ|ƒCƒ“ƒ^ƒ`ƒFƒbƒN
+	//NULLãƒã‚¤ãƒ³ã‚¿ãƒã‚§ãƒƒã‚¯
 	assert(model);
 
 	model_ = model;
 
 
-	//ƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
+	//ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
 	EnemyBulletHandle_ = TextureManager::Load("RED.png");
 
 
@@ -32,10 +32,10 @@ void EnemyBullet::OnCollision()
 
 Vector3 EnemyBullet::GetWorldPosition() 
 {
-	// ƒ[ƒ‹ƒhÀ•W‚ğ“ü‚ê‚é•Ï”
+	// ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å…¥ã‚Œã‚‹å¤‰æ•°
 	Vector3 worldPos;
 
-	// ƒ[ƒ‹ƒhs—ñ‚Ì•½sˆÚ“®¬•ª‚ğæ“¾(ƒ[ƒ‹ƒhÀ•W)
+	// ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã®å¹³è¡Œç§»å‹•æˆåˆ†ã‚’å–å¾—(ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™)
 	worldPos.x = worldTransform_.matWorld_.m[3][0];
 	worldPos.y = worldTransform_.matWorld_.m[3][1];
 	worldPos.z = worldTransform_.matWorld_.m[3][2];

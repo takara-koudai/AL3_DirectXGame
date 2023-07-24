@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Model.h"
 #include "WorldTransform.h"
 
@@ -7,18 +7,18 @@ class PlayerBullet
 public:
 
 	//
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 
 	void Initialize(Model* model, const Vector3& position, const Vector3& velocity);
 
 	//
-	//XVˆ—
+	//æ›´æ–°å‡¦ç†
 
 	void Update();
 
 
 	//
-	//•`‰æ
+	//æç”»
 
 	void Draw(const ViewProjection& viewProjection);
 
@@ -26,38 +26,38 @@ public:
 	bool IsDead() const { return isDead_; }
 
 
-	// Õ“Ë‚ğŒŸo‚µ‚½‚çŒÄ‚Ño‚³‚ê‚éƒR[ƒ‹ƒoƒbƒNŠÖ”
+	// è¡çªã‚’æ¤œå‡ºã—ãŸã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
 	void OnCollision();
 
-	// ƒ[ƒ‹ƒhÀ•W‚ğæ“¾
+	// ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å–å¾—
 	Vector3 GetWorldPosition();
 
 
 private:
 
-	// ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+	// ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
 	WorldTransform worldTransform_;
 
 	ViewProjection viewProjection_;
 
 
-	// ƒ‚ƒfƒ‹
+	// ãƒ¢ãƒ‡ãƒ«
 	Model* model_ = nullptr;
 	
 
-	// ƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«
 	uint32_t ModeltextureHandle_ = 0u;
 
-	//’e‚Ì‘¬“x
+	//å¼¾ã®é€Ÿåº¦
 	Vector3 velocity_;
 
-	//õ–½<frm>
+	//å¯¿å‘½<frm>
 	static const int32_t kLifeTime = 60 * 5;
 
-	//ƒfƒXƒ^ƒCƒ}[
+	//ãƒ‡ã‚¹ã‚¿ã‚¤ãƒãƒ¼
 	int32_t deathTimer_ = kLifeTime;
 
-	//ƒfƒXƒtƒ‰ƒO
+	//ãƒ‡ã‚¹ãƒ•ãƒ©ã‚°
 	bool isDead_ = false;
 
 };

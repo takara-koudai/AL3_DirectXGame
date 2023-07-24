@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Model.h"
 #include "WorldTransform.h"
 #include "EnemyBullet.h"
@@ -11,7 +11,7 @@ enum class Phase
 	Leave,
 };
 
-//©‹@ƒNƒ‰ƒX‚Ì‘O•ûéŒ¾
+//è‡ªæ©Ÿã‚¯ãƒ©ã‚¹ã®å‰æ–¹å®£è¨€
 class Player;
 
 
@@ -20,77 +20,77 @@ class Enemy
 public:
 
 
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	void Initialize(Model* model, uint32_t textureHandle);
 
 
-	//XVˆ—
+	//æ›´æ–°å‡¦ç†
 	void Update();
 
 
-	//•`‰æ
+	//æç”»
 	void Draw(ViewProjection& viewProjection);
 
 
-	// ’e”­Ë
+	// å¼¾ç™ºå°„
 	void Fire(Vector3& position_);
 
 
-	//ƒfƒXƒgƒ‰ƒNƒ^
+	//ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	~Enemy();
 
 
-	//’e”­ËŠÔŠu
+	//å¼¾ç™ºå°„é–“éš”
 	static const int kFireInterval = 50;
 	
 
-	//Ú‹ßƒtƒF[ƒY‚Ì‰Šú‰»
+	//æ¥è¿‘ãƒ•ã‚§ãƒ¼ã‚ºã®åˆæœŸåŒ–
 	void Phase_();
 
 
-	//setter‚Ì—˜—p
+	//setterã®åˆ©ç”¨
 	void SetPlayer(Player* player) { player_ = player; }
 
 
-	// ƒ[ƒ‹ƒhÀ•W‚ğæ“¾
+	// ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å–å¾—
 	Vector3 GetWorldPosition();
 
-	// Õ“Ë‚ğŒŸo‚µ‚½‚çŒÄ‚Ño‚³‚ê‚éƒR[ƒ‹ƒoƒbƒNŠÖ”
+	// è¡çªã‚’æ¤œå‡ºã—ãŸã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
 	void OnCollision();
 
-	// ’eƒŠƒXƒg
+	// å¼¾ãƒªã‚¹ãƒˆ
 	const std::list<EnemyBullet*>& GetBullet() const { return Enemybullets_; }
 	
 
 private:
 
-	// ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+	// ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
 	WorldTransform worldTransform_;
 
 	ViewProjection viewProjection_;
 
 
-	// ƒ‚ƒfƒ‹
+	// ãƒ¢ãƒ‡ãƒ«
 	Model* model_ = nullptr;
 
 	uint32_t EnemytextureHandle_ = 0u;
 	
 
-	//ƒtƒF[ƒY
+	//ãƒ•ã‚§ãƒ¼ã‚º
 	Phase phase_ = phase_;
 
-	// ’e
+	// å¼¾
 	EnemyBullet* Enemybullet_ = nullptr;
 
-	// ’e
+	// å¼¾
 	std::list<EnemyBullet*> Enemybullets_;
 
 
-	//”­Ëƒ^ƒCƒ}[
+	//ç™ºå°„ã‚¿ã‚¤ãƒãƒ¼
 	int32_t fireTimer = 0;
 
 
-	//©ƒLƒƒƒ‰
+	//è‡ªã‚­ãƒ£ãƒ©
 	Player* player_ = nullptr;
 
 	

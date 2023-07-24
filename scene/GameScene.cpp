@@ -8,15 +8,17 @@
 #include "PlayerBullet.h"
 #include "EnemyBullet.h"
 #include "MatrixTrans.h"
+#include "Skydome.h"
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() 
+GameScene::~GameScene()
 { 
 	delete model_;
 	delete player_;
 	delete debugCamera_;
 	delete enemy_;
+	delete skydomeModel_;
 }
 
 
@@ -26,12 +28,24 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	
+	//自機
 	textureHandle_ = TextureManager::Load("mario.jpg");
 	//textureHandle_ = TextureManager::Load("debugfont.png");
 
+
+	//敵
 	EnemytextureHandle_ = TextureManager::Load("jugemu.jpg");
 
+
+	//背景
+	skydomeModel_ = Model::CreateFromOBJ("skydome", true);
+
+
+	//ビュープロジェクションの初期化
+	viewProjection_.farZ = 1000.0f;
+
+
+	//model_ = Model::Create();
 
 	worldTransform_.Initialize();
 
@@ -66,7 +80,13 @@ void GameScene::Initialize() {
 	enemy_->SetPlayer(player_);
 
 
+	//背景
+	skydome_ = new Skydome();
 	
+	skydome_->Initialize(skydomeModel_);
+
+
+
 
 	//デバックカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
@@ -210,6 +230,7 @@ void GameScene::Update()
 	//自キャラの更新
 	player_->Update();
 	enemy_->Update();
+	skydome_->Update();
 
 	ImGui::Begin("Debug1");
 
@@ -265,8 +286,6 @@ void GameScene::Update()
 		viewProjection_.UpdateMatrix();
 	}
 
-	
-
 }
 
 void GameScene::Draw() {
@@ -296,7 +315,10 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
+	
+	skydome_->Draw(viewProjection_);
 
+	
 	//自キャラの描画
 	
 	player_->Draw(viewProjection_);
@@ -315,6 +337,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
