@@ -38,7 +38,7 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle)
 
 	worldTransform_.Initialize();
 
-	worldTransform_.translation_.z = 40.0f;
+	worldTransform_.translation_.z = 80.0f;
 	worldTransform_.translation_.x = 30.0f;
 
 	phase_ = Phase::Approach;
@@ -183,8 +183,10 @@ void Enemy::Update()
 	// 足し算
 	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
 
-	worldTransform_.matWorld_ = MakeAffineMatrix(
-	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+	//worldTransform_.matWorld_ = MakeAffineMatrix(
+	//    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+
+	worldTransform_.UpdateMatrix();
 
 	worldTransform_.TransferMatrix();
 

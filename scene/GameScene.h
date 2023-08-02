@@ -12,6 +12,7 @@
 #include "DebugCamera.h"
 #include "Enemy.h"
 #include "Skydome.h"
+#include "RailCamera.h"
 
 /// <summary>
 /// ゲームシーン
@@ -51,6 +52,8 @@ public: // メンバ関数
 	void CheckAllCollisions();
 
 
+	//Vector3 GetWorldPosition() { return worldTransform_.translation_; }
+	
 
 
 private: // メンバ変数
@@ -96,6 +99,8 @@ private: // メンバ変数
 	
 	Model* skydomeModel_ = nullptr;
 
+
+	RailCamera* railCamera = nullptr;
 
 
 	/// <summary>

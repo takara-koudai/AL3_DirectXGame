@@ -15,7 +15,7 @@ Player::~Player()
 
 }
 
-
+/*
 Vector3 Player::GetWorldPosition()
 {
 	//ワールド座標を入れる変数
@@ -29,11 +29,11 @@ Vector3 Player::GetWorldPosition()
 	return worldPos;
 
 }
-
+*/
 
 //
 //初期化
-void Player::Initialize(Model* model, uint32_t textureHandle) { 
+void Player::Initialize(Model* model, uint32_t textureHandle,Vector3 StartPos) { 
 
 	//NULLポインタチェック
 	assert(model);
@@ -50,18 +50,16 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 
 	//スケーリング
 	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
-	
-
 
 	//回転
-	//worldTransform_.rotation_ = {0.0f, 3.14f / 4.0f, 0.0f};
 	worldTransform_.rotation_ = {0.0f, 0.0f, 0.0f};
 
 	//平行移動行列
-	worldTransform_.translation_ = {0.0f, 0.0f, -5.0f};
+	worldTransform_.translation_ = StartPos; //{5.0f, 5.0f, -5.0f};
 
+	StartPos.z = 5.0f;
 	
-	// ワールド変換の初期化
+	// ワールド換の初期化
 	worldTransform_.Initialize();
 }
 
@@ -71,15 +69,6 @@ void Player::Attack(Vector3& position)
 
 	if (input_->TriggerKey(DIK_SPACE)) 
 	{
-
-		// 弾があれば解放する
-		/*if (bullet_)
-		{
-		    delete bullet_;
-		    bullet_ = nullptr;
-		}*/
-
-
 		//弾の速度
 		const float kBulletSpeed = 1.0f;
 		Vector3 velocity(0, 0, kBulletSpeed);
@@ -93,16 +82,21 @@ void Player::Attack(Vector3& position)
 		PlayerBullet* newBullet = new PlayerBullet();
 		newBullet->Initialize(model_, position, velocity);
 
-		// 弾を登録する
-		//bullet_ = newBullet;
-
+		
 		bullets_.push_back(newBullet);
 	}
 }
 
+//当たり判定
 void Player::OnCollision()
 {
 	
+}
+
+//親子関係
+void Player::SetPrent(const WorldTransform* parent)
+{
+	worldTransform_.parent_ = parent;
 }
 
 //
@@ -173,16 +167,16 @@ void Player::Update()
 	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
 
+	Vector3 position;
+
+	position.x = worldTransform_.matWorld_.m[3][0];
+	position.y = worldTransform_.matWorld_.m[3][1];
+	position.z = worldTransform_.matWorld_.m[3][2];
+
+
 
 	//キャラクター攻撃処理
-	Attack(worldTransform_.translation_);
-
-
-	//弾更新
-	/*if (bullet_) 
-	{
-		bullet_->Update();
-	}*/
+	Attack(position);
 	
 
 	for (PlayerBullet* bullet : bullets_) 
@@ -193,18 +187,15 @@ void Player::Update()
 
 	//足し算
 	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
-	
-	
 
-	worldTransform_.matWorld_ = 
-	MakeAffineMatrix(
-	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
-
+	worldTransform_.UpdateMatrix();
 	worldTransform_.TransferMatrix();
+
+	
 
 
 	//デバック画面
-	/*ImGui::Begin("Debug");
+	ImGui::Begin("Debug");
 
 	float playerPos[] = 
 	{
@@ -212,15 +203,13 @@ void Player::Update()
 		worldTransform_.translation_.y,
 	    worldTransform_.translation_.z
 	};
-	ImGui::SliderFloat3("PlayerPos", playerPos, 1000, 720);
+	ImGui::SliderFloat3("PlayerPos", playerPos, -20.0f, 25.0f);
 
-
+	ImGui::End();
 
 	worldTransform_.translation_.x = playerPos[0];
-	worldTransform_.translation_.x = playerPos[1];
-	worldTransform_.translation_.x = playerPos[2];
-
-	ImGui::End();*/
+	worldTransform_.translation_.y = playerPos[1];
+	worldTransform_.translation_.z = playerPos[2];
 
 }
 
@@ -238,12 +227,5 @@ void Player::Draw(ViewProjection &viewProjection)
 		bullet->Draw(viewProjection);
 	}
 
-	/*if (bullet_)
-	{
-		bullet_->Draw(viewProjection);
-		
-	}*/
-
-	
 	
 }

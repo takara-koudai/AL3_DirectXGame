@@ -9,6 +9,7 @@
 #include "EnemyBullet.h"
 #include "MatrixTrans.h"
 #include "Skydome.h"
+#include "RailCamera.h"
 
 GameScene::GameScene() {}
 
@@ -66,7 +67,8 @@ void GameScene::Initialize() {
 	
 
 	//自キャラの初期化
-	player_->Initialize(model_,textureHandle_);
+	Vector3 playerPosition(0, 0, 15.0f);
+	player_->Initialize(model_,textureHandle_,playerPosition);
 
 
 
@@ -86,6 +88,16 @@ void GameScene::Initialize() {
 	skydome_->Initialize(skydomeModel_);
 
 
+	//レールカメラ
+	railCamera = new RailCamera();
+
+	Vector3 radian = {0.0f, 0.0f, 0.0f};
+
+	railCamera->Initialize(player_->GetWorldPosition(),radian);
+
+
+	//自キャラとレールカメラの親子関係を結ぶ
+	player_->SetPrent(&railCamera->GetWorldTransform());
 
 
 	//デバックカメラの生成
@@ -232,40 +244,33 @@ void GameScene::Update()
 	enemy_->Update();
 	skydome_->Update();
 
-	ImGui::Begin("Debug1");
+	debugCamera_->Update();
 
-	//float3入力ボックス
+	railCamera->Update();
+
 	
-	//ImGui::InputFloat3("InputFloat3", inputFloat3);
-
-
-	//float3スライダー
-	ImGui::SliderFloat3("SliderFloat3", inputFloat3, 0.0f, 1.0f);
-
-	ImGui::ShowDemoWindow();
-
-	ImGui::End();
 
 	// 当たり判定
 	CheckAllCollisions();
 
-	//debugCamera_->Update();
+	//isDebugCameraActive_ = false;
 
 
 	#ifdef _DEBUG
 
-	if (input_->TriggerKey(DIK_K) == isDebugCameraActive_ == false)
+	if (input_->TriggerKey(DIK_P) == isDebugCameraActive_ == false)
 	{
 		isDebugCameraActive_ = true;
 
-		//debugCamera->Update();
-	} else if (input_->TriggerKey(DIK_K) == isDebugCameraActive_ == true) 
+	} else if (input_->TriggerKey(DIK_P) == isDebugCameraActive_ == true) 
 	{
 		isDebugCameraActive_ = false;
 	}
 
-#endif // DEBUG
+	
 
+#endif // DEBUG
+	
 
 	// Cameraの処理
 	if (isDebugCameraActive_) 
@@ -282,10 +287,14 @@ void GameScene::Update()
 	} 
 	else 
 	{
-		//ビュープロジェクション行列の更新と転送
-		viewProjection_.UpdateMatrix();
-	}
 
+		viewProjection_.matView = railCamera->GetViewProjection().matView;
+		viewProjection_.matProjection = railCamera->GetViewProjection().matProjection;
+		viewProjection_.TransferMatrix();
+		//ビュープロジェクション行列の更新と転送
+		//viewProjection_.UpdateMatrix();
+	}
+	
 }
 
 void GameScene::Draw() {
@@ -311,7 +320,7 @@ void GameScene::Draw() {
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
 
-	/// <summary>
+	/// <summary>.
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
