@@ -2,7 +2,7 @@
 #include "MatrixTrans.h"
 //#include "ImGuiManager.h"
 
-void RailCamera::Initialize(Vector3 position,Vector3& radian) 
+void RailCamera::Initialize(Vector3 position,Vector3& radian)
 {
 
 	//ワールドトランスフォームの初期化設定
@@ -16,8 +16,6 @@ void RailCamera::Initialize(Vector3 position,Vector3& radian)
 
 	//ビュープロジェクション初期化
 	viewProjection_.Initialize();
-
-
 
 }
 

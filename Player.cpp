@@ -43,10 +43,8 @@ void Player::Initialize(Model* model, uint32_t textureHandle,Vector3 StartPos) {
 	model_ = model;
 	textureHandle_ = textureHandle;
 
-
 	// キーボード
 	input_ = Input::GetInstance();
-
 
 	//スケーリング
 	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
@@ -57,7 +55,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle,Vector3 StartPos) {
 	//平行移動行列
 	worldTransform_.translation_ = StartPos; //{5.0f, 5.0f, -5.0f};
 
-	StartPos.z = 5.0f;
+	StartPos.z = 1000.0f;
 	
 	// ワールド換の初期化
 	worldTransform_.Initialize();
@@ -73,15 +71,12 @@ void Player::Attack(Vector3& position)
 		const float kBulletSpeed = 1.0f;
 		Vector3 velocity(0, 0, kBulletSpeed);
 
-
 		//速度ベクトルを自機の向きに合わせて回転させる
 		velocity = TransformNormal(velocity, worldTransform_.matWorld_);
-
 
 		// 弾を生成し、初期化
 		PlayerBullet* newBullet = new PlayerBullet();
 		newBullet->Initialize(model_, position, velocity);
-
 		
 		bullets_.push_back(newBullet);
 	}
@@ -102,8 +97,7 @@ void Player::SetPrent(const WorldTransform* parent)
 //
 //更新処理
 void Player::Update() 
-{	
-
+{
 	//デスフラグが立った弾を削除
 	bullets_.remove_if([](PlayerBullet* bullet) 
 	{
@@ -153,8 +147,6 @@ void Player::Update()
 		worldTransform_.rotation_.y += kRotSpeed;
 	}
 
-
-
 	//移動限界座標
 	const float kMoveLimitX = (35.0f);
 	const float kMoveLimitY = (18.0f);
@@ -173,8 +165,6 @@ void Player::Update()
 	position.y = worldTransform_.matWorld_.m[3][1];
 	position.z = worldTransform_.matWorld_.m[3][2];
 
-
-
 	//キャラクター攻撃処理
 	Attack(position);
 	
@@ -190,8 +180,6 @@ void Player::Update()
 
 	worldTransform_.UpdateMatrix();
 	worldTransform_.TransferMatrix();
-
-	
 
 
 	//デバック画面
@@ -218,14 +206,10 @@ void Player::Update()
 //描画
 void Player::Draw(ViewProjection &viewProjection)
 {
-
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
-
 
 	for (PlayerBullet* bullet : bullets_) 
 	{
 		bullet->Draw(viewProjection);
 	}
-
-	
 }

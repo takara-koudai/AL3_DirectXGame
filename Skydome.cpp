@@ -15,7 +15,7 @@ void Skydome::Initialize(Model* model)
 
 	worldTransform_.scale_ = {100.0f, 100.0f, 100.0f};
 
-	worldTransform_.translation_.z = 8.0f;
+	worldTransform_.translation_.z = 10.0f;
 
 }
 

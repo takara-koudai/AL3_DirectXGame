@@ -2,6 +2,7 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include"ImGuiManager.h"
+
 class RailCamera
 {
 public:
@@ -29,7 +30,6 @@ public:
 	const WorldTransform &GetWorldTransform() const { return worldTransform_; }
 
 
-
 private:
 
 
@@ -37,8 +37,6 @@ private:
 	WorldTransform worldTransform_;
 
 	ViewProjection viewProjection_;
-
-
 
 
 };
