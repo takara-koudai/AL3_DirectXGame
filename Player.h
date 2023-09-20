@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "PlayerBullet.h"
 #include <list>
+#include "Sprite.h"
 
 class Player 
 {
@@ -15,7 +16,7 @@ public:
 
 	
 	// 更新処理
-	void Update();
+	void Update(ViewProjection& viewProjection);
 
 	
 	// 描画
@@ -46,6 +47,27 @@ public:
 	void SetPrent(const WorldTransform* parent);
 
 
+	// <summary>
+	// UI描画
+	// </summary>
+	void DrawUI();
+
+
+	//Vector3 GetWorldPosition() 
+	//{
+	//	// ワールド座標を入れる変数
+	//	Vector3 worldPos;
+
+	//	// ワールド行列の平行移動成分を取得(ワールド座標)
+	//	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	//	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	//	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	//	return worldPos;
+	//}
+    
+
+
 
 private:
 
@@ -66,7 +88,7 @@ private:
 	//キーボード入力
 	Input* input_ = nullptr;
 
-
+	
 	// 弾
 	PlayerBullet* bullet_ = nullptr;
 	
@@ -75,7 +97,15 @@ private:
 	std:: list<PlayerBullet*> bullets_;
 
 
-	
+	//3Dレティクル用ワールドトランスフォーム
+	WorldTransform worldTransform3DReticle_;
 
+
+	//2Dレティクル用スプライト
+	Sprite* sprite2DReticle_ = nullptr;
+
+	Vector2 ReticlePos = {640, 360};
+	Vector4 color = {1, 1, 1, 1};
+	Vector2 anchor = {0.5f, 0.5f};
 
 };

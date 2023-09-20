@@ -149,7 +149,7 @@ void Enemy::Update()
 
 	case Phase::Leave: // 離脱フェーズ
 
-		move.z -= kCharacterSpeed;
+		//move.z -= kCharacterSpeed;
 
 		// 移動(ベクトルの加算)
 		//move.x -= kCharacterSpeed;
@@ -176,7 +176,6 @@ void Enemy::Draw(ViewProjection& viewProjection)
 {
 
 	model_->Draw(worldTransform_, viewProjection, EnemytextureHandle_);
-
 
 	/*if (Enemybullet_)
 	{
