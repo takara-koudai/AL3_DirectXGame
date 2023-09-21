@@ -177,7 +177,7 @@ void Player::Update(ViewProjection& viewProjection) {
 
 
 	//マウスでカーソルを動かす
-	GetmousePoint();
+	//GetmousePoint();
 
 	//ゲームパッドでカーソルを動かす
 	GetReticlePoint();
@@ -218,7 +218,7 @@ void Player::Draw(ViewProjection& viewProjection) {
 void Player::Attack(Vector3& position) {
 
 	// ゲームパッド未接続なら何もせずに抜ける
-	/* if (!Input::GetInstance()->GetJoystickState(0, joyState)) 
+	if (!Input::GetInstance()->GetJoystickState(0, joyState)) 
 	{
 		return;
 	}
@@ -247,33 +247,34 @@ void Player::Attack(Vector3& position) {
 
 		PlayerBullet* newBullet = new PlayerBullet();
 		newBullet->Initialize(model_, position, Velocity);
-	}*/
-
-	if (input_->TriggerKey(DIK_SPACE))
-	{
-	    // 弾の速度
-	    const float kBulletSpeed = 1.0f;
-	    Vector3 velocity(0, 0, kBulletSpeed);
-
-	    // 速度ベクトルを自機の向きに合わせて回転させる
-	    velocity = TransformNormal(velocity, worldTransform_.matWorld_);
-
-	    //自機から照準オブジェクトへのベクトル
-	    Vector3 pos;
-	    pos.x = worldTransform3DReticle_.translation_.x - worldTransform_.translation_.x;
-	    pos.y = worldTransform3DReticle_.translation_.y - worldTransform_.translation_.y;
-	    pos.z = worldTransform3DReticle_.translation_.z - worldTransform_.translation_.z;
-
-	    velocity = {pos.x, pos.y, pos.z};
-
-	    velocity = Normalize(velocity);
-
-	    // 弾を生成し、初期化
-	    PlayerBullet* newBullet = new PlayerBullet();
-	    newBullet->Initialize(model_, position, velocity);
-
-	    bullets_.push_back(newBullet);
 	}
+
+	/*if (input_->TriggerKey(DIK_SPACE)) 
+	{
+		// 弾の速度
+		const float kBulletSpeed = 1.0f;
+		Vector3 velocity(0, 0, kBulletSpeed);
+
+		// 速度ベクトルを自機の向きに合わせて回転させる
+		velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+
+		// 自機から照準オブジェクトへのベクトル
+		Vector3 pos;
+		pos.x = worldTransform3DReticle_.translation_.x - worldTransform_.translation_.x;
+		pos.y = worldTransform3DReticle_.translation_.y - worldTransform_.translation_.y;
+		pos.z = worldTransform3DReticle_.translation_.z - worldTransform_.translation_.z;
+
+		velocity = {pos.x, pos.y, pos.z};
+
+		velocity = Normalize(velocity);
+
+		// 弾を生成し、初期化
+		PlayerBullet* newBullet = new PlayerBullet();
+		newBullet->Initialize(model_, position, velocity);
+
+		bullets_.push_back(newBullet);
+	}*/
+	
 }
 
 // 当たり判定
