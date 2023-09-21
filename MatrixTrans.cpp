@@ -1,4 +1,4 @@
-#include "MatrixTrans.h"
+ï»¿#include "MatrixTrans.h"
 #include "Player.h"
 #include <cassert>
 
@@ -11,7 +11,7 @@ Vector3 Add(const Vector3 v1, const Vector3 v2) {
 	return result;
 }
 
-// ˆø‚«Z
+// å¼•ãç®—
 Vector3 Subtract(const Vector3& v1, const Vector3& v2) {
 	Vector3 result;
 	result.x = v1.x - v2.x;
@@ -242,7 +242,7 @@ Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
 	return result;
 }
 
-// “àÏ
+// å†…ç©
 float Dot(const Vector3& v1, const Vector3& v2) {
 	float result;
 
@@ -251,14 +251,14 @@ float Dot(const Vector3& v1, const Vector3& v2) {
 	return result;
 }
 
-// ’·‚³A•½•ûª
+// é•·ã•ã€å¹³æ–¹æ ¹
 float Length(const Vector3& v) {
 	float reslut;
 	reslut = sqrtf(Dot(v, v));
 	return reslut;
 }
 
-// ³‹K‰»
+// æ­£è¦åŒ–
 Vector3 Normalize(const Vector3& v) {
 
 	Vector3 result;
@@ -299,7 +299,7 @@ Matrix4x4 Inverse(const Matrix4x4& m) {
 
 	float rectdeterminant = 1 / determinant;
 
-	// 0s—ñ
+	// 0è¡Œåˆ—
 	result.m[0][0] = (m.m[1][1] * m.m[2][2] * m.m[3][3] + m.m[1][2] * m.m[2][3] * m.m[3][1] +
 	                  m.m[1][3] * m.m[2][1] * m.m[3][2] - m.m[1][3] * m.m[2][2] * m.m[3][1] -
 	                  m.m[1][2] * m.m[2][1] * m.m[3][3] - m.m[1][1] * m.m[2][3] * m.m[3][2]) *
@@ -320,7 +320,7 @@ Matrix4x4 Inverse(const Matrix4x4& m) {
 	                  m.m[0][2] * m.m[1][1] * m.m[2][3] + m.m[0][1] * m.m[1][3] * m.m[2][2]) *
 	                 rectdeterminant;
 
-	// 1s—ñ
+	// 1è¡Œåˆ—
 	result.m[1][0] = (-m.m[1][0] * m.m[2][2] * m.m[3][3] - m.m[1][2] * m.m[2][3] * m.m[3][0] -
 	                  m.m[1][3] * m.m[2][0] * m.m[3][2] + m.m[1][3] * m.m[2][2] * m.m[3][0] +
 	                  m.m[1][2] * m.m[2][0] * m.m[3][3] + m.m[1][0] * m.m[2][3] * m.m[3][2]) *
@@ -341,7 +341,7 @@ Matrix4x4 Inverse(const Matrix4x4& m) {
 	                  m.m[0][2] * m.m[1][0] * m.m[2][3] - m.m[0][0] * m.m[1][3] * m.m[2][2]) *
 	                 rectdeterminant;
 
-	// 2s—ñ
+	// 2è¡Œåˆ—
 	result.m[2][0] = (m.m[1][0] * m.m[2][1] * m.m[3][3] + m.m[1][1] * m.m[2][3] * m.m[3][0] +
 	                  m.m[1][3] * m.m[2][0] * m.m[3][1] - m.m[1][3] * m.m[2][1] * m.m[3][0] -
 	                  m.m[1][1] * m.m[2][0] * m.m[3][3] - m.m[1][0] * m.m[2][3] * m.m[3][1]) *
@@ -362,7 +362,7 @@ Matrix4x4 Inverse(const Matrix4x4& m) {
 	                  m.m[0][1] * m.m[1][0] * m.m[2][3] + m.m[0][0] * m.m[1][3] * m.m[2][1]) *
 	                 rectdeterminant;
 
-	// 3s—ñ
+	// 3è¡Œåˆ—
 	result.m[3][0] = (-m.m[1][0] * m.m[2][1] * m.m[3][2] - m.m[1][1] * m.m[2][2] * m.m[3][0] -
 	                  m.m[1][2] * m.m[2][0] * m.m[3][1] + m.m[1][2] * m.m[2][1] * m.m[3][0] +
 	                  m.m[1][1] * m.m[2][0] * m.m[3][2] + m.m[1][0] * m.m[2][2] * m.m[3][1]) *

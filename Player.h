@@ -67,6 +67,10 @@ public:
 	//}
     
 
+	// <summary>
+	// レティクルUpdate
+	// </summary>
+	void UpdateReticle(ViewProjection& viewProjection);
 
 
 private:
@@ -107,5 +111,17 @@ private:
 	Vector2 ReticlePos = {640, 360};
 	Vector4 color = {1, 1, 1, 1};
 	Vector2 anchor = {0.5f, 0.5f};
+
+	// マウス
+	void GetmousePoint();
+
+	void GetReticlePoint();
+	
+	POINT mausePosition;
+
+	//ゲームパッド
+	XINPUT_STATE joyState;
+	Vector2 joyPos{640.0f, 360.f};
+
 
 };
