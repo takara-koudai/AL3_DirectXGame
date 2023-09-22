@@ -156,18 +156,20 @@ void Player::Update(ViewProjection& viewProjection) {
 
 	// 3Dレティクルのワールド座標から2Dレティクルのスクリーン座標を計算
 	Vector3 positionReticle = {
-	    worldTransform3DReticle_.matWorld_.m[3][0], worldTransform3DReticle_.matWorld_.m[3][1],
-	    worldTransform3DReticle_.matWorld_.m[3][2]};
+	    worldTransform3DReticle_.matWorld_.m[3][0], 
+		worldTransform3DReticle_.matWorld_.m[3][1],
+	    worldTransform3DReticle_.matWorld_.m[3][2]
+	};
 
 	// ビューポート行列
 	Matrix4x4 matViewport =
 	    MakeViewportMatrix(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight, 0, 1);
-
 	
 
 	// ビュー行列とプロジェクション行列、ビューポート行列を合成する
 	Matrix4x4 matViewProjectionViewport =
 	    Multiply(Multiply(viewProjection.matView, viewProjection.matProjection), matViewport);
+	
 
 	// ワールド→スクリーン座標変換(ここで3Dから2Dになる)
 	positionReticle = Transform(positionReticle, matViewProjectionViewport);
@@ -177,7 +179,7 @@ void Player::Update(ViewProjection& viewProjection) {
 
 
 	//マウスでカーソルを動かす
-	//GetmousePoint();
+	GetmousePoint();
 
 	//ゲームパッドでカーソルを動かす
 	GetReticlePoint();
@@ -217,6 +219,33 @@ void Player::Draw(ViewProjection& viewProjection) {
 
 void Player::Attack(Vector3& position) {
 
+	if (input_->TriggerKey(DIK_SPACE))
+	{
+	    // 弾の速度
+	    const float kBulletSpeed = 1.0f;
+	    Vector3 velocity(0, 0, kBulletSpeed);
+
+	    // 速度ベクトルを自機の向きに合わせて回転させる
+	    velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+
+	    // 自機から照準オブジェクトへのベクトル
+	    Vector3 pos;
+	    pos.x = worldTransform3DReticle_.translation_.x - worldTransform_.translation_.x;
+	    pos.y = worldTransform3DReticle_.translation_.y - worldTransform_.translation_.y;
+	    pos.z = worldTransform3DReticle_.translation_.z - worldTransform_.translation_.z;
+
+	    velocity = {pos.x, pos.y, pos.z};
+
+	    velocity = Normalize(velocity);
+
+	    // 弾を生成し、初期化
+	    PlayerBullet* newBullet = new PlayerBullet();
+	    newBullet->Initialize(model_, position, velocity);
+
+	    bullets_.push_back(newBullet);
+	}
+	
+
 	// ゲームパッド未接続なら何もせずに抜ける
 	if (!Input::GetInstance()->GetJoystickState(0, joyState)) 
 	{
@@ -249,31 +278,6 @@ void Player::Attack(Vector3& position) {
 		newBullet->Initialize(model_, position, Velocity);
 	}
 
-	/*if (input_->TriggerKey(DIK_SPACE)) 
-	{
-		// 弾の速度
-		const float kBulletSpeed = 1.0f;
-		Vector3 velocity(0, 0, kBulletSpeed);
-
-		// 速度ベクトルを自機の向きに合わせて回転させる
-		velocity = TransformNormal(velocity, worldTransform_.matWorld_);
-
-		// 自機から照準オブジェクトへのベクトル
-		Vector3 pos;
-		pos.x = worldTransform3DReticle_.translation_.x - worldTransform_.translation_.x;
-		pos.y = worldTransform3DReticle_.translation_.y - worldTransform_.translation_.y;
-		pos.z = worldTransform3DReticle_.translation_.z - worldTransform_.translation_.z;
-
-		velocity = {pos.x, pos.y, pos.z};
-
-		velocity = Normalize(velocity);
-
-		// 弾を生成し、初期化
-		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(model_, position, velocity);
-
-		bullets_.push_back(newBullet);
-	}*/
 	
 }
 
@@ -298,7 +302,7 @@ void Player::DrawUI()
 // ゲームパッド関数
 void Player::GetReticlePoint() 
 {
-	Vector2 spritePosition = sprite2DReticle_->GetPosition();
+	spritePosition = sprite2DReticle_->GetPosition();
 
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) 
 	{
@@ -307,6 +311,7 @@ void Player::GetReticlePoint()
 
 		sprite2DReticle_->SetPosition(spritePosition);
 	}
+
 }
 
 // マウス関数

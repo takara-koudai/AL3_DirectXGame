@@ -123,5 +123,8 @@ private:
 	XINPUT_STATE joyState;
 	Vector2 joyPos{640.0f, 360.f};
 
+	Vector2 spritePosition;
+
+
 
 };
