@@ -154,14 +154,14 @@ void GameScene::Update() {
 
 	UpdateEnemyPopCommands();
 
-	if (count == 5)
-	{
-		clearScene = true;
-		Vector3 playerPosition(0, 0, 20.0f);
-		player_->Initialize(model_, textureHandle_, playerPosition);
-
-	}
-
+	
+	//if (count >= 5) {
+	//	clearScene = true;
+	//	Vector3 playerPosition(0, 0, 20.0f);
+	//	player_->Initialize(model_, textureHandle_, playerPosition);
+	//
+	//	
+	//}
 	
 }
 
@@ -320,6 +320,21 @@ void GameScene::CheckAllCollisions() {
 				enemy->OnCollision();
 
 				count += 1;
+
+				if (count >= 5) 
+				{
+					clearScene = true;
+					Vector3 playerPosition(0, 0, 20.0f);
+					player_->Initialize(model_, textureHandle_, playerPosition);
+
+					enemyPopCommands.clear();
+					// 敵リセット
+					enemies_.clear();
+					enemyBullets_.clear();
+
+					LoadEnemyPopData();
+					return;
+				}
 
 			}
 		}
