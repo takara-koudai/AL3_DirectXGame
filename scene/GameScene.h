@@ -1,18 +1,19 @@
 #pragma once
 
 #include "Audio.h"
+#include "DebugCamera.h"
 #include "DirectXCommon.h"
+#include "Enemy.h"
 #include "Input.h"
 #include "Model.h"
+#include "Player.h"
+#include "RailCamera.h"
 #include "SafeDelete.h"
+#include "Scene.h"
+#include "Skydome.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include "Player.h"
-#include "DebugCamera.h"
-#include "Enemy.h"
-#include "Skydome.h"
-#include "RailCamera.h"
 #include <sstream>
 
 /// <summary>
@@ -46,32 +47,55 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
-
 	// <summary>
 	// 衝突判定と応答
 	// </summary>
 	void CheckAllCollisions();
 
-
-	//Vector3 GetWorldPosition() { return worldTransform_.translation_; }
-	
+	// Vector3 GetWorldPosition() { return worldTransform_.translation_; }
 
 	// <summary>
 	// 衝突判定と応答
 	// </summary>
 	void AddEnemyBullet(EnemyBullet* enemybullet);
 
-
 	// <summary>
 	// 敵発生データの読み込み
 	// </summary>
 	void LoadEnemyPopData();
 
-
 	// <summary>
 	// 敵発生コマンドの更新
 	// </summary>
 	void UpdateEnemyPopCommands();
+
+
+	bool IsSceneEnd() { return isSceneEnd; }
+	bool ClearScene() { return clearScene; }
+
+	SceneType NextScene() { return SceneType::kEndeScene; }
+	SceneType NextScene2() { return SceneType::kClearScene; }
+
+	//ゲームオーバーのリセット
+	void Reset() 
+	{
+		isSceneEnd = false;
+
+		//敵リセット
+		//enemies_.push_back(enemy_);
+	}
+
+	
+	//クリアのリセット
+	void ClearReset() 
+	{
+		clearScene = false;
+		count = 0;
+	}
+
+
+
+	
 
 
 private: // メンバ変数
@@ -84,61 +108,60 @@ private: // メンバ変数
 	void EnemyObjUpdate();
 	void EnemyObjDraw();
 
-
-	uint32_t textureHandle_ = 0; //自機
-
+	uint32_t textureHandle_ = 0; // 自機
 
 	Model* model_ = nullptr;
 
-
-	//ワールド変換
+	// ワールド変換
 	WorldTransform worldTransform_;
 
-
-	//ビュープロジェクション
+	// ビュープロジェクション
 	ViewProjection viewProjection_;
 
-
-	//プレイヤー
+	// プレイヤー
 	Player* player_ = nullptr;
 
 	float inputFloat3[3] = {0, 0, 0};
 
-
-	//デバッグカメラ
+	// デバッグカメラ
 	bool isDebugCameraActive_ = false;
-
 
 	DebugCamera* debugCamera_ = nullptr;
 
-
-	//敵
+	// 敵
 	Enemy* enemy_ = nullptr;
 
 	uint32_t EnemytextureHandle_ = 0; // 敵
 
-	 
-	//背景
+	// 背景
 	Skydome* skydome_ = nullptr;
-	
-	Model* skydomeModel_ = nullptr;
 
+	Model* skydomeModel_ = nullptr;
 
 	RailCamera* railCamera = nullptr;
 
-
-	//敵と弾のリスト
+	// 敵と弾のリスト
 	std::list<EnemyBullet*> enemyBullets_;
 	std::list<Enemy*> enemies_;
 
-
-	//敵発生コマンド
+	// 敵発生コマンド
 	std::stringstream enemyPopCommands;
 
-
-	//待機用のタイマーとフラグ
+	// 待機用のタイマーとフラグ
 	bool waitFlag_ = false;
 	int32_t waitTime_ = 0;
+
+
+	// シーン遷移
+	//ゲームオーバー
+	bool isSceneEnd = false;
+
+	//クリア
+	bool clearScene = false;
+
+	int count = 0;
+
+
 
 
 	/// <summary>

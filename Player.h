@@ -26,6 +26,9 @@ public:
 	//攻撃
 	void Attack(Vector3& position);
 
+
+	bool isDead() const { return isDead_; }
+	
 	
 	//デストラクタ
 	~Player();
@@ -95,6 +98,9 @@ private:
 	
 	// 弾
 	PlayerBullet* bullet_ = nullptr;
+
+	//bool isDead_ = true;
+	bool isDead_ = false;
 	
 
 	//弾

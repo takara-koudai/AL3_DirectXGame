@@ -153,6 +153,16 @@ void GameScene::Update() {
 	// LoadEnemyPopData();
 
 	UpdateEnemyPopCommands();
+
+	if (count == 5)
+	{
+		clearScene = true;
+		Vector3 playerPosition(0, 0, 20.0f);
+		player_->Initialize(model_, textureHandle_, playerPosition);
+
+	}
+
+	
 }
 
 void GameScene::Draw() {
@@ -213,12 +223,16 @@ void GameScene::Draw() {
 }
 
 void GameScene::CheckAllCollisions() {
+	if (isSceneEnd) {
+		return;
+	}
+
 	Vector3 posA, posB;
 
 	// 自弾リストの取得
 	const std::list<PlayerBullet*>& playerBullets = player_->GetBullet();
-    // 敵弾リストの取得
-  //const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullet();
+	// 敵弾リストの取得
+	// const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullet();
 
 // 自キャラと敵弾の当たり判定
 #pragma region
@@ -251,6 +265,23 @@ void GameScene::CheckAllCollisions() {
 
 			// 敵弾の衝突時コールバックを呼び出す
 			bullet->OnCollision();
+
+			// 自分が死んだかどうかの判定
+			isSceneEnd = true;	
+
+			if (isSceneEnd == true)
+			{
+				Vector3 playerPosition(0, 0, 20.0f);
+				player_->Initialize(model_, textureHandle_, playerPosition);
+				
+				enemyPopCommands.clear();
+				//敵リセット
+				enemies_.clear();
+				enemyBullets_.clear();
+
+				LoadEnemyPopData();
+				return;
+			}
 		}
 	}
 
@@ -261,18 +292,20 @@ void GameScene::CheckAllCollisions() {
 
 	Vector3 PosA, PosB;
 
-	PosA = enemy_->GetWorldPosition();
+	for (Enemy* enemy : enemies_) 
+	{
+		PosA = enemy->GetWorldPosition();
 
-	for (Enemy* enemy : enemies_) {
 		for (PlayerBullet* playerbullet : playerBullets) {
 			// 自弾の座標
 			PosB = playerbullet->GetWorldPosition();
+
 
 			float Dx;
 			float Dy;
 			float Dz;
 			float distance2;
-			float radius2 = 0.5;
+			float radius2 = 0.5f;
 
 			// 距離を求める
 			Dx = (PosB.x - PosA.x) * (PosB.x - PosA.x);
@@ -281,10 +314,13 @@ void GameScene::CheckAllCollisions() {
 
 			distance2 = Dx + Dy + Dz;
 
-			if (distance2 <= (radius2 + radius2) * (radius2 + radius2)) {
+  			if (distance2 <= (radius2 + radius2) * (radius2 + radius2)) {
 				playerbullet->OnCollision();
 
 				enemy->OnCollision();
+
+				count += 1;
+
 			}
 		}
 	}
@@ -325,10 +361,7 @@ void GameScene::CheckAllCollisions() {
 #pragma endregion
 }
 
-void GameScene::AddEnemyBullet(EnemyBullet* enemybullet) 
-{ 
-	enemyBullets_.push_back(enemybullet); 
-}
+void GameScene::AddEnemyBullet(EnemyBullet* enemybullet) { enemyBullets_.push_back(enemybullet); }
 
 void GameScene::LoadEnemyPopData() {
 	// ファイルを開く
@@ -464,3 +497,5 @@ void GameScene::EnemyObjDraw() {
 		Enemybullet->Draw(viewProjection_);
 	}
 }
+
+

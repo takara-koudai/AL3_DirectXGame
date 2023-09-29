@@ -66,6 +66,8 @@ public:
 
 	bool IsDead() const { return isDead_; }
 
+	
+
 
 private:
 
@@ -92,7 +94,6 @@ private:
 	Player* player_ = nullptr;
 
 	GameScene* gameScene_ = nullptr;
-
 
 	bool isDead_ = false;
 
