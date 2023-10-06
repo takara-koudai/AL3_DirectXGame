@@ -65,7 +65,7 @@ void GameScene::Update()
 	player_->Update();
 
 
-	ImGui::Begin("Debug1");
+	/*ImGui::Begin("Debug1");
 
 	//float3入力ボックス
 	
@@ -77,7 +77,7 @@ void GameScene::Update()
 
 	ImGui::ShowDemoWindow();
 
-	ImGui::End();
+	ImGui::End();*/
 
 
 	//debugCamera_->Update();
